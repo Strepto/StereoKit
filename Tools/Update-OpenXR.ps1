@@ -17,10 +17,10 @@ if ($openxrCurrent -ne $openxrDesired) {
 }
 
 # Get the Visual Studio executable for building
-$vsExe = & "C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -property productPath -version '[16.0,17.0)'
+$vsExe = & "C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -property productPath -version '[17.0,18.0)'
 if (!$vsExe) {
-    Write-Host "Visual Studio 2019 not found! VS 2022 may work, but official builds are done on 2019 currently. Swap out the version number to [16.0,18.0) to include VS 2022." -ForegroundColor red
-    exit 
+    Write-Host "Visual Studio 2022 not found! Other VS versions may work, but official builds are done on 2022 currently. Swap out the version number range to [16.0,18.0) to change VS versions." -ForegroundColor red
+    exit 1
 }
 
 # This tell VS to build with a partcular 'Release|x64' style mode
@@ -76,31 +76,31 @@ New-Item -Path . -Name "ARM_UWP" -ItemType "directory" | Out-Null
 # cmake each project configuration
 Push-Location -Path "x64"
 Write-Host 'Making x64' -ForegroundColor green
-& cmake -G "Visual Studio 16 2019" -A x64 ../..
+& cmake -G "Visual Studio 17 2022" -A x64 ../..
 Write-Host 'Made x64' -ForegroundColor green
 Pop-Location
 
 Push-Location -Path "x64_UWP"
 Write-Host 'Making x64_UWP' -ForegroundColor green
-& cmake -G "Visual Studio 16 2019" -A x64 "-DCMAKE_SYSTEM_NAME=WindowsStore" "-DCMAKE_SYSTEM_VERSION=10.0" "-DDYNAMIC_LOADER=OFF" ../..
+& cmake -G "Visual Studio 17 2022" -A x64 "-DCMAKE_SYSTEM_NAME=WindowsStore" "-DCMAKE_SYSTEM_VERSION=10.0" "-DDYNAMIC_LOADER=OFF" ../..
 Write-Host 'Made x64_UWP' -ForegroundColor green
 Pop-Location
 
 Push-Location -Path "ARM64"
 Write-Host 'Making ARM64' -ForegroundColor green
-& cmake -G "Visual Studio 16 2019" -A ARM64 ../..
+& cmake -G "Visual Studio 17 2022" -A ARM64 ../..
 Write-Host 'Made ARM64' -ForegroundColor green
 Pop-Location
 
 Push-Location -Path "ARM64_UWP"
 Write-Host 'Making ARM64_UWP' -ForegroundColor green
-& cmake -G "Visual Studio 16 2019" -A ARM64 "-DCMAKE_SYSTEM_NAME=WindowsStore" "-DCMAKE_SYSTEM_VERSION=10.0" "-DDYNAMIC_LOADER=OFF" ../..
+& cmake -G "Visual Studio 17 2022" -A ARM64 "-DCMAKE_SYSTEM_NAME=WindowsStore" "-DCMAKE_SYSTEM_VERSION=10.0" "-DDYNAMIC_LOADER=OFF" ../..
 Write-Host 'Made ARM64_UWP' -ForegroundColor green
 Pop-Location
 
 Push-Location -Path "ARM_UWP"
 Write-Host 'Making ARM_UWP' -ForegroundColor green
-& cmake -G "Visual Studio 16 2019" -A ARM "-DCMAKE_SYSTEM_NAME=WindowsStore" "-DCMAKE_SYSTEM_VERSION=10.0" "-DDYNAMIC_LOADER=OFF" ../..
+& cmake -G "Visual Studio 17 2022" -A ARM "-DCMAKE_SYSTEM_NAME=WindowsStore" "-DCMAKE_SYSTEM_VERSION=10.0" "-DDYNAMIC_LOADER=OFF" ../..
 Write-Host 'Made ARM_UWP' -ForegroundColor green
 Pop-Location
 
@@ -125,7 +125,7 @@ Remove-Item -Path "OpenXR-SDK" -Recurse -Force -Confirm:$false
 # Mark the current OpenXR version down
 Set-Content -Path 'oxr_current.txt' -Value $openxrDesired
 
-Pop-Location
+# Pop-Location - TODO: I think this popped one time too many?
 
 # We'll tack on a React Physics build here as well. This may mean
 # more builds of react physics than strictly necessary, but we do

@@ -4,10 +4,10 @@ param(
     [string]$key = ''
 )
 
-$vsExe = & "C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -property productPath -version '[16.0,17.0)'
+$vsExe = & "C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -property productPath -version '[17.0,18.0)'
 if (!$vsExe) {
-    Write-Host "Visual Studio 2019 not found! VS 2022 may work, but official builds are done on 2019 currently. Swap out the version number to [16.0,18.0) to include VS 2022." -ForegroundColor red
-    exit 
+    Write-Host "Visual Studio 2022 not found! Swap out the version number to [17.0,19.0) to include newer VS versions, but you will have to adjust some more scripts." -ForegroundColor red
+    exit 1
 }
 $vsExe = [io.path]::ChangeExtension($vsExe, '.com')
 
